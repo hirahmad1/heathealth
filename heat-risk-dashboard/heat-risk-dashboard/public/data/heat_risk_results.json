@@ -1,0 +1,722 @@
+[
+  {
+    "area_id": "tile_0",
+    "lat": 34.044572,
+    "lon": -118.251703,
+    "temp_f": 97.9632,
+    "svi_score": 0.6572,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.514
+  },
+  {
+    "area_id": "tile_1",
+    "lat": 34.049514,
+    "lon": -118.256158,
+    "temp_f": 96.6522,
+    "svi_score": 0.4349,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2201
+  },
+  {
+    "area_id": "tile_2",
+    "lat": 34.047851,
+    "lon": -118.206306,
+    "temp_f": 96.5491,
+    "svi_score": 0.7789,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3321
+  },
+  {
+    "area_id": "tile_3",
+    "lat": 34.06069,
+    "lon": -118.254332,
+    "temp_f": 97.7767,
+    "svi_score": 0.5695,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.5109
+  },
+  {
+    "area_id": "tile_4",
+    "lat": 34.053927,
+    "lon": -118.217252,
+    "temp_f": 97.5295,
+    "svi_score": 0.6223,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.4108
+  },
+  {
+    "area_id": "tile_5",
+    "lat": 34.043511,
+    "lon": -118.232769,
+    "temp_f": 97.2437,
+    "svi_score": 0.6718,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.4751
+  },
+  {
+    "area_id": "tile_6",
+    "lat": 34.036839,
+    "lon": -118.233107,
+    "temp_f": 96.5318,
+    "svi_score": 0.8646,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3273
+  },
+  {
+    "area_id": "tile_7",
+    "lat": 34.045758,
+    "lon": -118.232683,
+    "temp_f": 98.3048,
+    "svi_score": 0.3638,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.4763
+  },
+  {
+    "area_id": "tile_8",
+    "lat": 34.061567,
+    "lon": -118.224408,
+    "temp_f": 98.7638,
+    "svi_score": 0.5144,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.7793
+  },
+  {
+    "area_id": "tile_9",
+    "lat": 34.045996,
+    "lon": -118.226399,
+    "temp_f": 97.5952,
+    "svi_score": 0.1995,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2561
+  },
+  {
+    "area_id": "tile_10",
+    "lat": 34.050213,
+    "lon": -118.229781,
+    "temp_f": 98.5071,
+    "svi_score": 0.8057,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.7975
+  },
+  {
+    "area_id": "tile_11",
+    "lat": 34.04712,
+    "lon": -118.247309,
+    "temp_f": 96.6342,
+    "svi_score": 0.6817,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2645
+  },
+  {
+    "area_id": "tile_12",
+    "lat": 34.030184,
+    "lon": -118.236958,
+    "temp_f": 97.304,
+    "svi_score": 0.4633,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.357
+  },
+  {
+    "area_id": "tile_13",
+    "lat": 34.069194,
+    "lon": -118.207646,
+    "temp_f": 98.0325,
+    "svi_score": 0.2204,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3587
+  },
+  {
+    "area_id": "tile_14",
+    "lat": 34.033031,
+    "lon": -118.248518,
+    "temp_f": 96.8198,
+    "svi_score": 0.418,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3101
+  },
+  {
+    "area_id": "tile_15",
+    "lat": 34.057618,
+    "lon": -118.256133,
+    "temp_f": 96.9265,
+    "svi_score": 0.2506,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.1347
+  },
+  {
+    "area_id": "tile_16",
+    "lat": 34.068202,
+    "lon": -118.205379,
+    "temp_f": 97.5304,
+    "svi_score": 0.7704,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.5337
+  },
+  {
+    "area_id": "tile_17",
+    "lat": 34.061143,
+    "lon": -118.231602,
+    "temp_f": 96.9202,
+    "svi_score": 0.888,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.5251
+  },
+  {
+    "area_id": "tile_18",
+    "lat": 34.06885,
+    "lon": -118.221709,
+    "temp_f": 97.0509,
+    "svi_score": 0.9044,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.506
+  },
+  {
+    "area_id": "tile_19",
+    "lat": 34.057595,
+    "lon": -118.216638,
+    "temp_f": 98.2144,
+    "svi_score": 0.5979,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.623
+  },
+  {
+    "area_id": "tile_20",
+    "lat": 34.046,
+    "lon": -118.258406,
+    "temp_f": 96.5053,
+    "svi_score": 0.3391,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.1862
+  },
+  {
+    "area_id": "tile_21",
+    "lat": 34.062541,
+    "lon": -118.240776,
+    "temp_f": 98.7204,
+    "svi_score": 0.1844,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.587
+  },
+  {
+    "area_id": "tile_22",
+    "lat": 34.070514,
+    "lon": -118.213776,
+    "temp_f": 97.5619,
+    "svi_score": 0.2651,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3872
+  },
+  {
+    "area_id": "tile_23",
+    "lat": 34.063756,
+    "lon": -118.233708,
+    "temp_f": 96.8578,
+    "svi_score": 0.3429,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2108
+  },
+  {
+    "area_id": "tile_24",
+    "lat": 34.063451,
+    "lon": -118.255329,
+    "temp_f": 96.8117,
+    "svi_score": 0.5555,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3093
+  },
+  {
+    "area_id": "tile_25",
+    "lat": 34.056814,
+    "lon": -118.23391,
+    "temp_f": 98.6337,
+    "svi_score": 0.3812,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.6309
+  },
+  {
+    "area_id": "tile_26",
+    "lat": 34.072013,
+    "lon": -118.23614,
+    "temp_f": 98.4799,
+    "svi_score": 0.5922,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.719
+  },
+  {
+    "area_id": "tile_27",
+    "lat": 34.04467,
+    "lon": -118.230061,
+    "temp_f": 98.3921,
+    "svi_score": 0.2656,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.579
+  },
+  {
+    "area_id": "tile_28",
+    "lat": 34.069518,
+    "lon": -118.252808,
+    "temp_f": 96.7953,
+    "svi_score": 0.7246,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.303
+  },
+  {
+    "area_id": "tile_29",
+    "lat": 34.051307,
+    "lon": -118.220114,
+    "temp_f": 97.7421,
+    "svi_score": 0.4152,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.5034
+  },
+  {
+    "area_id": "tile_30",
+    "lat": 34.032557,
+    "lon": -118.249478,
+    "temp_f": 96.5388,
+    "svi_score": 0.3695,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.1473
+  },
+  {
+    "area_id": "tile_31",
+    "lat": 34.057564,
+    "lon": -118.232195,
+    "temp_f": 97.6384,
+    "svi_score": 0.6405,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.5411
+  },
+  {
+    "area_id": "tile_32",
+    "lat": 34.069444,
+    "lon": -118.20818,
+    "temp_f": 97.0475,
+    "svi_score": 0.4619,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2892
+  },
+  {
+    "area_id": "tile_33",
+    "lat": 34.044219,
+    "lon": -118.223086,
+    "temp_f": 97.4422,
+    "svi_score": 0.7745,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.4621
+  },
+  {
+    "area_id": "tile_34",
+    "lat": 34.069727,
+    "lon": -118.206785,
+    "temp_f": 96.9539,
+    "svi_score": 0.6297,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2986
+  },
+  {
+    "area_id": "tile_35",
+    "lat": 34.049418,
+    "lon": -118.231642,
+    "temp_f": 97.2336,
+    "svi_score": 0.1049,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.1955
+  },
+  {
+    "area_id": "tile_36",
+    "lat": 34.030814,
+    "lon": -118.241768,
+    "temp_f": 97.9,
+    "svi_score": 0.4525,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.4256
+  },
+  {
+    "area_id": "tile_37",
+    "lat": 34.042236,
+    "lon": -118.210176,
+    "temp_f": 96.8648,
+    "svi_score": 0.9199,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.434
+  },
+  {
+    "area_id": "tile_38",
+    "lat": 34.054147,
+    "lon": -118.231687,
+    "temp_f": 97.5974,
+    "svi_score": 0.4154,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3731
+  },
+  {
+    "area_id": "tile_39",
+    "lat": 34.030757,
+    "lon": -118.255129,
+    "temp_f": 97.0497,
+    "svi_score": 0.4716,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2851
+  },
+  {
+    "area_id": "tile_40",
+    "lat": 34.054888,
+    "lon": -118.209033,
+    "temp_f": 97.0668,
+    "svi_score": 0.6554,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.35
+  },
+  {
+    "area_id": "tile_41",
+    "lat": 34.038152,
+    "lon": -118.208726,
+    "temp_f": 97.9111,
+    "svi_score": 0.8391,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.6247
+  },
+  {
+    "area_id": "tile_42",
+    "lat": 34.030817,
+    "lon": -118.246225,
+    "temp_f": 96.4758,
+    "svi_score": 0.2187,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.02
+  },
+  {
+    "area_id": "tile_43",
+    "lat": 34.066851,
+    "lon": -118.23623,
+    "temp_f": 97.5983,
+    "svi_score": 0.6286,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.4703
+  },
+  {
+    "area_id": "tile_44",
+    "lat": 34.067453,
+    "lon": -118.22113,
+    "temp_f": 97.9282,
+    "svi_score": 0.4309,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.5098
+  },
+  {
+    "area_id": "tile_45",
+    "lat": 34.069593,
+    "lon": -118.236309,
+    "temp_f": 96.5696,
+    "svi_score": 0.6262,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2968
+  },
+  {
+    "area_id": "tile_46",
+    "lat": 34.032036,
+    "lon": -118.249806,
+    "temp_f": 97.0695,
+    "svi_score": 0.8158,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.412
+  },
+  {
+    "area_id": "tile_47",
+    "lat": 34.073455,
+    "lon": -118.242975,
+    "temp_f": 97.2745,
+    "svi_score": 0.6263,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3823
+  },
+  {
+    "area_id": "tile_48",
+    "lat": 34.064931,
+    "lon": -118.255003,
+    "temp_f": 98.352,
+    "svi_score": 0.6674,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.612
+  },
+  {
+    "area_id": "tile_49",
+    "lat": 34.073094,
+    "lon": -118.213071,
+    "temp_f": 96.8032,
+    "svi_score": 0.2911,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.1277
+  },
+  {
+    "area_id": "tile_50",
+    "lat": 34.062587,
+    "lon": -118.224623,
+    "temp_f": 96.5424,
+    "svi_score": 0.7284,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3664
+  },
+  {
+    "area_id": "tile_51",
+    "lat": 34.063879,
+    "lon": -118.228734,
+    "temp_f": 98.3422,
+    "svi_score": 0.6873,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.6179
+  },
+  {
+    "area_id": "tile_52",
+    "lat": 34.031884,
+    "lon": -118.224958,
+    "temp_f": 98.6853,
+    "svi_score": 0.6403,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.74
+  },
+  {
+    "area_id": "tile_53",
+    "lat": 34.030149,
+    "lon": -118.216127,
+    "temp_f": 98.1909,
+    "svi_score": 0.1165,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3827
+  },
+  {
+    "area_id": "tile_54",
+    "lat": 34.03335,
+    "lon": -118.245394,
+    "temp_f": 98.1466,
+    "svi_score": 0.2235,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3876
+  },
+  {
+    "area_id": "tile_55",
+    "lat": 34.070971,
+    "lon": -118.244197,
+    "temp_f": 96.5494,
+    "svi_score": 0.8699,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3783
+  },
+  {
+    "area_id": "tile_56",
+    "lat": 34.036005,
+    "lon": -118.233467,
+    "temp_f": 97.5767,
+    "svi_score": 0.7935,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.551
+  },
+  {
+    "area_id": "tile_57",
+    "lat": 34.050985,
+    "lon": -118.253482,
+    "temp_f": 98.5312,
+    "svi_score": 0.1044,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.4254
+  },
+  {
+    "area_id": "tile_58",
+    "lat": 34.052798,
+    "lon": -118.205296,
+    "temp_f": 98.766,
+    "svi_score": 0.4274,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.6172
+  },
+  {
+    "area_id": "tile_59",
+    "lat": 34.053583,
+    "lon": -118.207599,
+    "temp_f": 96.7503,
+    "svi_score": 0.6517,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.316
+  },
+  {
+    "area_id": "tile_60",
+    "lat": 34.069427,
+    "lon": -118.238326,
+    "temp_f": 96.8122,
+    "svi_score": 0.2818,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.1571
+  },
+  {
+    "area_id": "tile_61",
+    "lat": 34.044224,
+    "lon": -118.213787,
+    "temp_f": 96.4441,
+    "svi_score": 0.5001,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2519
+  },
+  {
+    "area_id": "tile_62",
+    "lat": 34.043042,
+    "lon": -118.239528,
+    "temp_f": 97.3594,
+    "svi_score": 0.8221,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.5765
+  },
+  {
+    "area_id": "tile_63",
+    "lat": 34.042629,
+    "lon": -118.257161,
+    "temp_f": 97.9891,
+    "svi_score": 0.9442,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.659
+  },
+  {
+    "area_id": "tile_64",
+    "lat": 34.046801,
+    "lon": -118.207411,
+    "temp_f": 98.5091,
+    "svi_score": 0.6762,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.7521
+  },
+  {
+    "area_id": "tile_65",
+    "lat": 34.032226,
+    "lon": -118.219721,
+    "temp_f": 97.495,
+    "svi_score": 0.6789,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.44
+  },
+  {
+    "area_id": "tile_66",
+    "lat": 34.048669,
+    "lon": -118.244504,
+    "temp_f": 97.0385,
+    "svi_score": 0.1597,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.1927
+  },
+  {
+    "area_id": "tile_67",
+    "lat": 34.047747,
+    "lon": -118.250797,
+    "temp_f": 96.8184,
+    "svi_score": 0.8494,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.49
+  },
+  {
+    "area_id": "tile_68",
+    "lat": 34.050248,
+    "lon": -118.252322,
+    "temp_f": 96.8902,
+    "svi_score": 0.7682,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.4435
+  },
+  {
+    "area_id": "tile_69",
+    "lat": 34.039096,
+    "lon": -118.258896,
+    "temp_f": 98.4772,
+    "svi_score": 0.4266,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.6097
+  },
+  {
+    "area_id": "tile_70",
+    "lat": 34.055843,
+    "lon": -118.240192,
+    "temp_f": 98.047,
+    "svi_score": 0.7081,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.6085
+  },
+  {
+    "area_id": "tile_71",
+    "lat": 34.059061,
+    "lon": -118.236249,
+    "temp_f": 97.1701,
+    "svi_score": 0.2063,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3064
+  },
+  {
+    "area_id": "tile_72",
+    "lat": 34.052042,
+    "lon": -118.255977,
+    "temp_f": 98.6167,
+    "svi_score": 0.5356,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.6404
+  },
+  {
+    "area_id": "tile_73",
+    "lat": 34.036843,
+    "lon": -118.206546,
+    "temp_f": 96.6949,
+    "svi_score": 0.5151,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.2576
+  },
+  {
+    "area_id": "tile_74",
+    "lat": 34.03178,
+    "lon": -118.216974,
+    "temp_f": 96.9841,
+    "svi_score": 0.8108,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.4364
+  },
+  {
+    "area_id": "tile_75",
+    "lat": 34.049684,
+    "lon": -118.217989,
+    "temp_f": 96.6727,
+    "svi_score": 0.4101,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.1241
+  },
+  {
+    "area_id": "tile_76",
+    "lat": 34.043568,
+    "lon": -118.234662,
+    "temp_f": 98.6839,
+    "svi_score": 0.7268,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.7007
+  },
+  {
+    "area_id": "tile_77",
+    "lat": 34.048531,
+    "lon": -118.224269,
+    "temp_f": 96.5694,
+    "svi_score": 0.727,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.333
+  },
+  {
+    "area_id": "tile_78",
+    "lat": 34.071632,
+    "lon": -118.247527,
+    "temp_f": 96.5197,
+    "svi_score": 0.8865,
+    "predicted_risk": 0,
+    "predicted_risk_prob": 0.3972
+  },
+  {
+    "area_id": "tile_79",
+    "lat": 34.05272,
+    "lon": -118.248713,
+    "temp_f": 98.7094,
+    "svi_score": 0.7962,
+    "predicted_risk": 1,
+    "predicted_risk_prob": 0.7469
+  }
+]

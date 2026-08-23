@@ -1,0 +1,282 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --bg-void: #060b14; --bg-panel: #0d1526; --bg-panel-raised: #131f36; --bg-panel-hover: #182545;
+    --line: #1d2a45; --line-soft: #141e34;
+    --text-hi: #eaf0fa; --text-mid: #9aa7c2; --text-dim: #5d6b8a;
+    --heat-cool: #22d3c7; --heat-warm: #fdba4d; --heat-hot: #fb7a3c; --heat-critical: #e23b3b;
+    --font-display: "Space Grotesk", sans-serif; --font-body: "Inter", sans-serif; --font-mono: "JetBrains Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body, #root { height: 100%; margin: 0; }
+  body { background: var(--bg-void); color: var(--text-hi); font-family: var(--font-body); }
+  button { font-family: inherit; cursor: pointer; }
+  .app-shell { display: grid; grid-template-columns: 320px 1fr; height: 100vh; width: 100%; overflow: hidden; }
+  .sidebar { background: var(--bg-panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; overflow-y: auto; }
+  .sidebar-header { padding: 22px 20px 16px; border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--heat-warm); display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+  .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--heat-critical); box-shadow: 0 0 0 3px rgba(226,59,59,.2); animation: pulse 2.2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 3px rgba(226,59,59,.2);} 50% { box-shadow: 0 0 0 6px rgba(226,59,59,.05);} }
+  .app-title { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0 0 6px; }
+  .app-subtitle { font-size: 12.5px; color: var(--text-mid); line-height: 1.5; margin: 0; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; padding: 16px 20px; border-bottom: 1px solid var(--line-soft); }
+  .stat-card { background: var(--bg-panel-raised); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; }
+  .stat-card-value { font-family: var(--font-mono); font-size: 20px; font-weight: 600; line-height: 1; }
+  .stat-card-value.critical { color: var(--heat-critical); }
+  .stat-card-value.warm { color: var(--heat-warm); }
+  .stat-card-label { font-size: 10.5px; color: var(--text-dim); margin-top: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  .legend-block { padding: 16px 20px; border-bottom: 1px solid var(--line-soft); }
+  .legend-title { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-mid); margin: 0 0 11px; }
+  .thermal-scale { position: relative; height: 9px; border-radius: 999px; background: linear-gradient(90deg, var(--heat-cool) 0%, var(--heat-warm) 45%, var(--heat-hot) 72%, var(--heat-critical) 100%); overflow: hidden; }
+  .thermal-scale::after { content: ""; position: absolute; top: 0; left: -30%; width: 30%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent); animation: scan 3.4s linear infinite; }
+  @keyframes scan { 0% { left: -30%; } 100% { left: 100%; } }
+  .thermal-scale-labels { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); margin-top: 7px; }
+  .filter-block { padding: 16px 20px; border-bottom: 1px solid var(--line-soft); flex-grow: 1; }
+  .filter-row { display: flex; flex-direction: column; gap: 8px; }
+  .filter-chip { display: flex; align-items: center; justify-content: space-between; padding: 9px 11px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg-panel-raised); color: var(--text-mid); font-size: 12.5px; }
+  .filter-chip.active { border-color: var(--heat-warm); background: var(--bg-panel-hover); color: var(--text-hi); }
+  .filter-chip-swatch { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; margin-right: 9px; }
+  .filter-chip-inner { display: flex; align-items: center; }
+  .filter-chip-count { font-family: var(--font-mono); color: var(--text-dim); }
+  .sidebar-footer { padding: 14px 20px 20px; font-size: 11px; color: var(--text-dim); line-height: 1.6; }
+  .map-area { position: relative; }
+  #leaflet-map { width: 100%; height: 100%; background: var(--bg-void); }
+  .map-topbar { position: absolute; top: 16px; left: 16px; z-index: 500; background: rgba(13,21,38,.88); border: 1px solid var(--line); border-radius: 10px; padding: 8px 13px; font-family: var(--font-mono); font-size: 11px; color: var(--text-mid); }
+  .map-topbar strong { color: var(--text-hi); }
+  .detail-panel { position: absolute; top: 0; right: 0; height: 100%; width: 320px; max-width: 85%; background: var(--bg-panel); border-left: 1px solid var(--line); z-index: 600; padding: 20px; overflow-y: auto; animation: slidein .25s ease; }
+  @keyframes slidein { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .detail-panel-close { background: none; border: 1px solid var(--line); color: var(--text-mid); border-radius: 6px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .detail-tag { display: inline-flex; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; border: 1px solid; margin-bottom: 12px; }
+  .detail-area-id { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); margin-bottom: 4px; }
+  .detail-headline { font-family: var(--font-display); font-size: 23px; font-weight: 600; margin: 0 0 16px; }
+  .detail-metric { border-top: 1px solid var(--line-soft); padding: 12px 0; }
+  .detail-metric-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+  .detail-metric-label { font-size: 12px; color: var(--text-mid); }
+  .detail-metric-value { font-family: var(--font-mono); font-size: 14px; }
+  .detail-bar-track { height: 5px; border-radius: 999px; background: var(--bg-panel-raised); overflow: hidden; }
+  .detail-bar-fill { height: 100%; border-radius: 999px; }
+  .detail-explain { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line-soft); }
+  .detail-explain-title { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-mid); margin-bottom: 9px; }
+  .detail-explain-text { font-size: 13px; line-height: 1.6; color: var(--text-mid); }
+  .detail-empty { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--text-dim); padding: 30px; }
+  .detail-empty-icon { width: 38px; height: 38px; border-radius: 50%; border: 1.5px dashed var(--line); margin-bottom: 14px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); color: var(--text-dim); }
+  .detail-empty-text { font-size: 12.5px; line-height: 1.6; max-width: 200px; }
+  .leaflet-popup-content-wrapper { background: #0d1526; color: #eaf0fa; border: 1px solid #1d2a45; }
+  .leaflet-popup-tip { background: #0d1526; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script id="risk-data" type="application/json">[{"area_id": "tile_0", "lat": 34.044572, "lon": -118.251703, "temp_f": 97.9632, "svi_score": 0.6572, "predicted_risk": 1, "predicted_risk_prob": 0.514}, {"area_id": "tile_1", "lat": 34.049514, "lon": -118.256158, "temp_f": 96.6522, "svi_score": 0.4349, "predicted_risk": 0, "predicted_risk_prob": 0.2201}, {"area_id": "tile_2", "lat": 34.047851, "lon": -118.206306, "temp_f": 96.5491, "svi_score": 0.7789, "predicted_risk": 0, "predicted_risk_prob": 0.3321}, {"area_id": "tile_3", "lat": 34.06069, "lon": -118.254332, "temp_f": 97.7767, "svi_score": 0.5695, "predicted_risk": 1, "predicted_risk_prob": 0.5109}, {"area_id": "tile_4", "lat": 34.053927, "lon": -118.217252, "temp_f": 97.5295, "svi_score": 0.6223, "predicted_risk": 0, "predicted_risk_prob": 0.4108}, {"area_id": "tile_5", "lat": 34.043511, "lon": -118.232769, "temp_f": 97.2437, "svi_score": 0.6718, "predicted_risk": 0, "predicted_risk_prob": 0.4751}, {"area_id": "tile_6", "lat": 34.036839, "lon": -118.233107, "temp_f": 96.5318, "svi_score": 0.8646, "predicted_risk": 0, "predicted_risk_prob": 0.3273}, {"area_id": "tile_7", "lat": 34.045758, "lon": -118.232683, "temp_f": 98.3048, "svi_score": 0.3638, "predicted_risk": 0, "predicted_risk_prob": 0.4763}, {"area_id": "tile_8", "lat": 34.061567, "lon": -118.224408, "temp_f": 98.7638, "svi_score": 0.5144, "predicted_risk": 1, "predicted_risk_prob": 0.7793}, {"area_id": "tile_9", "lat": 34.045996, "lon": -118.226399, "temp_f": 97.5952, "svi_score": 0.1995, "predicted_risk": 0, "predicted_risk_prob": 0.2561}, {"area_id": "tile_10", "lat": 34.050213, "lon": -118.229781, "temp_f": 98.5071, "svi_score": 0.8057, "predicted_risk": 1, "predicted_risk_prob": 0.7975}, {"area_id": "tile_11", "lat": 34.04712, "lon": -118.247309, "temp_f": 96.6342, "svi_score": 0.6817, "predicted_risk": 0, "predicted_risk_prob": 0.2645}, {"area_id": "tile_12", "lat": 34.030184, "lon": -118.236958, "temp_f": 97.304, "svi_score": 0.4633, "predicted_risk": 0, "predicted_risk_prob": 0.357}, {"area_id": "tile_13", "lat": 34.069194, "lon": -118.207646, "temp_f": 98.0325, "svi_score": 0.2204, "predicted_risk": 0, "predicted_risk_prob": 0.3587}, {"area_id": "tile_14", "lat": 34.033031, "lon": -118.248518, "temp_f": 96.8198, "svi_score": 0.418, "predicted_risk": 0, "predicted_risk_prob": 0.3101}, {"area_id": "tile_15", "lat": 34.057618, "lon": -118.256133, "temp_f": 96.9265, "svi_score": 0.2506, "predicted_risk": 0, "predicted_risk_prob": 0.1347}, {"area_id": "tile_16", "lat": 34.068202, "lon": -118.205379, "temp_f": 97.5304, "svi_score": 0.7704, "predicted_risk": 1, "predicted_risk_prob": 0.5337}, {"area_id": "tile_17", "lat": 34.061143, "lon": -118.231602, "temp_f": 96.9202, "svi_score": 0.888, "predicted_risk": 1, "predicted_risk_prob": 0.5251}, {"area_id": "tile_18", "lat": 34.06885, "lon": -118.221709, "temp_f": 97.0509, "svi_score": 0.9044, "predicted_risk": 1, "predicted_risk_prob": 0.506}, {"area_id": "tile_19", "lat": 34.057595, "lon": -118.216638, "temp_f": 98.2144, "svi_score": 0.5979, "predicted_risk": 1, "predicted_risk_prob": 0.623}, {"area_id": "tile_20", "lat": 34.046, "lon": -118.258406, "temp_f": 96.5053, "svi_score": 0.3391, "predicted_risk": 0, "predicted_risk_prob": 0.1862}, {"area_id": "tile_21", "lat": 34.062541, "lon": -118.240776, "temp_f": 98.7204, "svi_score": 0.1844, "predicted_risk": 1, "predicted_risk_prob": 0.587}, {"area_id": "tile_22", "lat": 34.070514, "lon": -118.213776, "temp_f": 97.5619, "svi_score": 0.2651, "predicted_risk": 0, "predicted_risk_prob": 0.3872}, {"area_id": "tile_23", "lat": 34.063756, "lon": -118.233708, "temp_f": 96.8578, "svi_score": 0.3429, "predicted_risk": 0, "predicted_risk_prob": 0.2108}, {"area_id": "tile_24", "lat": 34.063451, "lon": -118.255329, "temp_f": 96.8117, "svi_score": 0.5555, "predicted_risk": 0, "predicted_risk_prob": 0.3093}, {"area_id": "tile_25", "lat": 34.056814, "lon": -118.23391, "temp_f": 98.6337, "svi_score": 0.3812, "predicted_risk": 1, "predicted_risk_prob": 0.6309}, {"area_id": "tile_26", "lat": 34.072013, "lon": -118.23614, "temp_f": 98.4799, "svi_score": 0.5922, "predicted_risk": 1, "predicted_risk_prob": 0.719}, {"area_id": "tile_27", "lat": 34.04467, "lon": -118.230061, "temp_f": 98.3921, "svi_score": 0.2656, "predicted_risk": 1, "predicted_risk_prob": 0.579}, {"area_id": "tile_28", "lat": 34.069518, "lon": -118.252808, "temp_f": 96.7953, "svi_score": 0.7246, "predicted_risk": 0, "predicted_risk_prob": 0.303}, {"area_id": "tile_29", "lat": 34.051307, "lon": -118.220114, "temp_f": 97.7421, "svi_score": 0.4152, "predicted_risk": 1, "predicted_risk_prob": 0.5034}, {"area_id": "tile_30", "lat": 34.032557, "lon": -118.249478, "temp_f": 96.5388, "svi_score": 0.3695, "predicted_risk": 0, "predicted_risk_prob": 0.1473}, {"area_id": "tile_31", "lat": 34.057564, "lon": -118.232195, "temp_f": 97.6384, "svi_score": 0.6405, "predicted_risk": 1, "predicted_risk_prob": 0.5411}, {"area_id": "tile_32", "lat": 34.069444, "lon": -118.20818, "temp_f": 97.0475, "svi_score": 0.4619, "predicted_risk": 0, "predicted_risk_prob": 0.2892}, {"area_id": "tile_33", "lat": 34.044219, "lon": -118.223086, "temp_f": 97.4422, "svi_score": 0.7745, "predicted_risk": 0, "predicted_risk_prob": 0.4621}, {"area_id": "tile_34", "lat": 34.069727, "lon": -118.206785, "temp_f": 96.9539, "svi_score": 0.6297, "predicted_risk": 0, "predicted_risk_prob": 0.2986}, {"area_id": "tile_35", "lat": 34.049418, "lon": -118.231642, "temp_f": 97.2336, "svi_score": 0.1049, "predicted_risk": 0, "predicted_risk_prob": 0.1955}, {"area_id": "tile_36", "lat": 34.030814, "lon": -118.241768, "temp_f": 97.9, "svi_score": 0.4525, "predicted_risk": 0, "predicted_risk_prob": 0.4256}, {"area_id": "tile_37", "lat": 34.042236, "lon": -118.210176, "temp_f": 96.8648, "svi_score": 0.9199, "predicted_risk": 0, "predicted_risk_prob": 0.434}, {"area_id": "tile_38", "lat": 34.054147, "lon": -118.231687, "temp_f": 97.5974, "svi_score": 0.4154, "predicted_risk": 0, "predicted_risk_prob": 0.3731}, {"area_id": "tile_39", "lat": 34.030757, "lon": -118.255129, "temp_f": 97.0497, "svi_score": 0.4716, "predicted_risk": 0, "predicted_risk_prob": 0.2851}, {"area_id": "tile_40", "lat": 34.054888, "lon": -118.209033, "temp_f": 97.0668, "svi_score": 0.6554, "predicted_risk": 0, "predicted_risk_prob": 0.35}, {"area_id": "tile_41", "lat": 34.038152, "lon": -118.208726, "temp_f": 97.9111, "svi_score": 0.8391, "predicted_risk": 1, "predicted_risk_prob": 0.6247}, {"area_id": "tile_42", "lat": 34.030817, "lon": -118.246225, "temp_f": 96.4758, "svi_score": 0.2187, "predicted_risk": 0, "predicted_risk_prob": 0.02}, {"area_id": "tile_43", "lat": 34.066851, "lon": -118.23623, "temp_f": 97.5983, "svi_score": 0.6286, "predicted_risk": 0, "predicted_risk_prob": 0.4703}, {"area_id": "tile_44", "lat": 34.067453, "lon": -118.22113, "temp_f": 97.9282, "svi_score": 0.4309, "predicted_risk": 1, "predicted_risk_prob": 0.5098}, {"area_id": "tile_45", "lat": 34.069593, "lon": -118.236309, "temp_f": 96.5696, "svi_score": 0.6262, "predicted_risk": 0, "predicted_risk_prob": 0.2968}, {"area_id": "tile_46", "lat": 34.032036, "lon": -118.249806, "temp_f": 97.0695, "svi_score": 0.8158, "predicted_risk": 0, "predicted_risk_prob": 0.412}, {"area_id": "tile_47", "lat": 34.073455, "lon": -118.242975, "temp_f": 97.2745, "svi_score": 0.6263, "predicted_risk": 0, "predicted_risk_prob": 0.3823}, {"area_id": "tile_48", "lat": 34.064931, "lon": -118.255003, "temp_f": 98.352, "svi_score": 0.6674, "predicted_risk": 1, "predicted_risk_prob": 0.612}, {"area_id": "tile_49", "lat": 34.073094, "lon": -118.213071, "temp_f": 96.8032, "svi_score": 0.2911, "predicted_risk": 0, "predicted_risk_prob": 0.1277}, {"area_id": "tile_50", "lat": 34.062587, "lon": -118.224623, "temp_f": 96.5424, "svi_score": 0.7284, "predicted_risk": 0, "predicted_risk_prob": 0.3664}, {"area_id": "tile_51", "lat": 34.063879, "lon": -118.228734, "temp_f": 98.3422, "svi_score": 0.6873, "predicted_risk": 1, "predicted_risk_prob": 0.6179}, {"area_id": "tile_52", "lat": 34.031884, "lon": -118.224958, "temp_f": 98.6853, "svi_score": 0.6403, "predicted_risk": 1, "predicted_risk_prob": 0.74}, {"area_id": "tile_53", "lat": 34.030149, "lon": -118.216127, "temp_f": 98.1909, "svi_score": 0.1165, "predicted_risk": 0, "predicted_risk_prob": 0.3827}, {"area_id": "tile_54", "lat": 34.03335, "lon": -118.245394, "temp_f": 98.1466, "svi_score": 0.2235, "predicted_risk": 0, "predicted_risk_prob": 0.3876}, {"area_id": "tile_55", "lat": 34.070971, "lon": -118.244197, "temp_f": 96.5494, "svi_score": 0.8699, "predicted_risk": 0, "predicted_risk_prob": 0.3783}, {"area_id": "tile_56", "lat": 34.036005, "lon": -118.233467, "temp_f": 97.5767, "svi_score": 0.7935, "predicted_risk": 1, "predicted_risk_prob": 0.551}, {"area_id": "tile_57", "lat": 34.050985, "lon": -118.253482, "temp_f": 98.5312, "svi_score": 0.1044, "predicted_risk": 0, "predicted_risk_prob": 0.4254}, {"area_id": "tile_58", "lat": 34.052798, "lon": -118.205296, "temp_f": 98.766, "svi_score": 0.4274, "predicted_risk": 1, "predicted_risk_prob": 0.6172}, {"area_id": "tile_59", "lat": 34.053583, "lon": -118.207599, "temp_f": 96.7503, "svi_score": 0.6517, "predicted_risk": 0, "predicted_risk_prob": 0.316}, {"area_id": "tile_60", "lat": 34.069427, "lon": -118.238326, "temp_f": 96.8122, "svi_score": 0.2818, "predicted_risk": 0, "predicted_risk_prob": 0.1571}, {"area_id": "tile_61", "lat": 34.044224, "lon": -118.213787, "temp_f": 96.4441, "svi_score": 0.5001, "predicted_risk": 0, "predicted_risk_prob": 0.2519}, {"area_id": "tile_62", "lat": 34.043042, "lon": -118.239528, "temp_f": 97.3594, "svi_score": 0.8221, "predicted_risk": 1, "predicted_risk_prob": 0.5765}, {"area_id": "tile_63", "lat": 34.042629, "lon": -118.257161, "temp_f": 97.9891, "svi_score": 0.9442, "predicted_risk": 1, "predicted_risk_prob": 0.659}, {"area_id": "tile_64", "lat": 34.046801, "lon": -118.207411, "temp_f": 98.5091, "svi_score": 0.6762, "predicted_risk": 1, "predicted_risk_prob": 0.7521}, {"area_id": "tile_65", "lat": 34.032226, "lon": -118.219721, "temp_f": 97.495, "svi_score": 0.6789, "predicted_risk": 0, "predicted_risk_prob": 0.44}, {"area_id": "tile_66", "lat": 34.048669, "lon": -118.244504, "temp_f": 97.0385, "svi_score": 0.1597, "predicted_risk": 0, "predicted_risk_prob": 0.1927}, {"area_id": "tile_67", "lat": 34.047747, "lon": -118.250797, "temp_f": 96.8184, "svi_score": 0.8494, "predicted_risk": 0, "predicted_risk_prob": 0.49}, {"area_id": "tile_68", "lat": 34.050248, "lon": -118.252322, "temp_f": 96.8902, "svi_score": 0.7682, "predicted_risk": 0, "predicted_risk_prob": 0.4435}, {"area_id": "tile_69", "lat": 34.039096, "lon": -118.258896, "temp_f": 98.4772, "svi_score": 0.4266, "predicted_risk": 1, "predicted_risk_prob": 0.6097}, {"area_id": "tile_70", "lat": 34.055843, "lon": -118.240192, "temp_f": 98.047, "svi_score": 0.7081, "predicted_risk": 1, "predicted_risk_prob": 0.6085}, {"area_id": "tile_71", "lat": 34.059061, "lon": -118.236249, "temp_f": 97.1701, "svi_score": 0.2063, "predicted_risk": 0, "predicted_risk_prob": 0.3064}, {"area_id": "tile_72", "lat": 34.052042, "lon": -118.255977, "temp_f": 98.6167, "svi_score": 0.5356, "predicted_risk": 1, "predicted_risk_prob": 0.6404}, {"area_id": "tile_73", "lat": 34.036843, "lon": -118.206546, "temp_f": 96.6949, "svi_score": 0.5151, "predicted_risk": 0, "predicted_risk_prob": 0.2576}, {"area_id": "tile_74", "lat": 34.03178, "lon": -118.216974, "temp_f": 96.9841, "svi_score": 0.8108, "predicted_risk": 0, "predicted_risk_prob": 0.4364}, {"area_id": "tile_75", "lat": 34.049684, "lon": -118.217989, "temp_f": 96.6727, "svi_score": 0.4101, "predicted_risk": 0, "predicted_risk_prob": 0.1241}, {"area_id": "tile_76", "lat": 34.043568, "lon": -118.234662, "temp_f": 98.6839, "svi_score": 0.7268, "predicted_risk": 1, "predicted_risk_prob": 0.7007}, {"area_id": "tile_77", "lat": 34.048531, "lon": -118.224269, "temp_f": 96.5694, "svi_score": 0.727, "predicted_risk": 0, "predicted_risk_prob": 0.333}, {"area_id": "tile_78", "lat": 34.071632, "lon": -118.247527, "temp_f": 96.5197, "svi_score": 0.8865, "predicted_risk": 0, "predicted_risk_prob": 0.3972}, {"area_id": "tile_79", "lat": 34.05272, "lon": -118.248713, "temp_f": 98.7094, "svi_score": 0.7962, "predicted_risk": 1, "predicted_risk_prob": 0.7469}]</script>
+<script type="text/babel">
+const { useState, useEffect, useMemo, useRef } = React;
+
+const RISK_BANDS = [
+  { key: "critical", label: "Critical", min: 0.72, max: 1.01, color: "rgb(226, 59, 59)" },
+  { key: "elevated", label: "Elevated", min: 0.45, max: 0.72, color: "rgb(251, 122, 60)" },
+  { key: "low", label: "Low", min: 0, max: 0.45, color: "rgb(34, 211, 199)" },
+];
+
+const STOPS = [
+  { at: 0.0, color: [34, 211, 199] },
+  { at: 0.45, color: [253, 186, 77] },
+  { at: 0.72, color: [251, 122, 60] },
+  { at: 1.0, color: [226, 59, 59] },
+];
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function riskToColor(prob) {
+  const p = Math.min(Math.max(prob ?? 0, 0), 1);
+  for (let i = 0; i < STOPS.length - 1; i++) {
+    const a = STOPS[i], b = STOPS[i + 1];
+    if (p >= a.at && p <= b.at) {
+      const t = (p - a.at) / (b.at - a.at || 1);
+      return `rgb(${Math.round(lerp(a.color[0], b.color[0], t))}, ${Math.round(lerp(a.color[1], b.color[1], t))}, ${Math.round(lerp(a.color[2], b.color[2], t))})`;
+    }
+  }
+  return `rgb(${STOPS[STOPS.length - 1].color.join(", ")})`;
+}
+
+function riskToLabel(prob) {
+  if (prob >= 0.72) return "Critical";
+  if (prob >= 0.45) return "Elevated";
+  return "Low";
+}
+
+const FEATURE_IMPORTANCE = { temp_f: 0.708, svi_score: 0.292 };
+
+function explainArea(point) {
+  const hotter = point.temp_f >= 97.6;
+  const vulnerable = point.svi_score >= 0.55;
+  if (hotter && vulnerable) return "Flagged because this area combines above-average heat with high social vulnerability — the two factors compound rather than offset.";
+  if (hotter) return `Driven mainly by temperature (${(FEATURE_IMPORTANCE.temp_f * 100).toFixed(0)}% of the model's weight) — this tile runs hotter than most of the grid.`;
+  if (vulnerable) return `Driven mainly by social vulnerability (${(FEATURE_IMPORTANCE.svi_score * 100).toFixed(0)}% of the model's weight) — temperature is near average, but coping capacity is low.`;
+  return "Both temperature and social vulnerability sit near the grid average, keeping this area's score low.";
+}
+
+function Sidebar({ points, activeBand, onBandChange }) {
+  const total = points.length;
+  const critical = points.filter(p => p.predicted_risk_prob >= 0.72).length;
+  const elevated = points.filter(p => p.predicted_risk_prob >= 0.45 && p.predicted_risk_prob < 0.72).length;
+  const avgTemp = total > 0 ? (points.reduce((s, p) => s + (p.temp_f ?? 0), 0) / total).toFixed(1) : "—";
+  const bandCounts = { critical, elevated, low: total - critical - elevated };
+
+  return (
+    <aside className="sidebar">
+      <div className="sidebar-header">
+        <div className="eyebrow"><span className="eyebrow-dot"></span>Live model output</div>
+        <h1 className="app-title">Heat-Health Risk Predictor</h1>
+        <p className="app-subtitle">Hyperlocal temperature × social vulnerability, scored per area.</p>
+      </div>
+      <div className="stat-grid">
+        <div className="stat-card"><div className="stat-card-value">{total || "—"}</div><div className="stat-card-label">Areas scored</div></div>
+        <div className="stat-card"><div className="stat-card-value critical">{critical || "—"}</div><div className="stat-card-label">Critical risk</div></div>
+        <div className="stat-card"><div className="stat-card-value warm">{elevated || "—"}</div><div className="stat-card-label">Elevated risk</div></div>
+        <div className="stat-card"><div className="stat-card-value">{avgTemp}°F</div><div className="stat-card-label">Avg. temperature</div></div>
+      </div>
+      <div className="legend-block">
+        <p className="legend-title">Risk scale</p>
+        <div className="thermal-scale"></div>
+        <div className="thermal-scale-labels"><span>Low</span><span>Elevated</span><span>Critical</span></div>
+      </div>
+      <div className="filter-block">
+        <p className="legend-title">Filter by risk band</p>
+        <div className="filter-row">
+          <button className={`filter-chip ${activeBand === null ? "active" : ""}`} onClick={() => onBandChange(null)}>
+            <span className="filter-chip-inner"><span className="filter-chip-swatch" style={{background: "var(--text-dim)"}}></span>All areas</span>
+            <span className="filter-chip-count">{total}</span>
+          </button>
+          {RISK_BANDS.map(band => (
+            <button key={band.key} className={`filter-chip ${activeBand === band.key ? "active" : ""}`} onClick={() => onBandChange(band.key)}>
+              <span className="filter-chip-inner"><span className="filter-chip-swatch" style={{background: band.color}}></span>{band.label}</span>
+              <span className="filter-chip-count">{bandCounts[band.key]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="sidebar-footer">Rendered directly from the <code>output</code> variable in this notebook.</div>
+    </aside>
+  );
+}
+
+function AreaDetailPanel({ point, onClose }) {
+  if (!point) {
+    return (
+      <div className="detail-panel">
+        <div className="detail-empty">
+          <div className="detail-empty-icon">◎</div>
+          <p className="detail-empty-text">Click any point on the map to see its risk breakdown.</p>
+        </div>
+      </div>
+    );
+  }
+  const color = riskToColor(point.predicted_risk_prob);
+  const label = riskToLabel(point.predicted_risk_prob);
+  const probPct = Math.round(point.predicted_risk_prob * 100);
+  return (
+    <div className="detail-panel" key={point.area_id}>
+      <button className="detail-panel-close" onClick={onClose}>✕</button>
+      <span className="detail-tag" style={{color, borderColor: color}}>{label} risk</span>
+      <div className="detail-area-id">{point.area_id}</div>
+      <h2 className="detail-headline">{probPct}% predicted risk</h2>
+      <div className="detail-metric">
+        <div className="detail-metric-row"><span className="detail-metric-label">Temperature</span><span className="detail-metric-value">{point.temp_f?.toFixed(1)}°F</span></div>
+        <div className="detail-bar-track"><div className="detail-bar-fill" style={{width: `${Math.min(((point.temp_f - 95) / 5) * 100, 100)}%`, background: "var(--heat-hot)"}}></div></div>
+      </div>
+      <div className="detail-metric">
+        <div className="detail-metric-row"><span className="detail-metric-label">Social vulnerability</span><span className="detail-metric-value">{point.svi_score?.toFixed(2)}</span></div>
+        <div className="detail-bar-track"><div className="detail-bar-fill" style={{width: `${(point.svi_score ?? 0) * 100}%`, background: "var(--heat-cool)"}}></div></div>
+      </div>
+      <div className="detail-metric">
+        <div className="detail-metric-row"><span className="detail-metric-label">Coordinates</span><span className="detail-metric-value">{point.lat?.toFixed(4)}, {point.lon?.toFixed(4)}</span></div>
+      </div>
+      <div className="detail-explain">
+        <p className="detail-explain-title">Why this area was flagged</p>
+        <p className="detail-explain-text">{explainArea(point)}</p>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const points = useMemo(() => {
+    const raw = JSON.parse(document.getElementById("risk-data").textContent);
+    return Array.isArray(raw) ? raw : (raw.output ?? []);
+  }, []);
+
+  const [activeBand, setActiveBand] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+  const mapRef = useRef(null);
+  const leafletMapInstance = useRef(null);
+  const markersRef = useRef([]);
+
+  const filteredPoints = useMemo(() => {
+    if (!activeBand) return points;
+    const band = RISK_BANDS.find(b => b.key === activeBand);
+    if (!band) return points;
+    return points.filter(p => p.predicted_risk_prob >= band.min && p.predicted_risk_prob < band.max);
+  }, [points, activeBand]);
+
+  const selectedPoint = points.find(p => p.area_id === selectedId) ?? null;
+
+  useEffect(() => {
+    if (!mapRef.current || leafletMapInstance.current) return;
+    const map = L.map(mapRef.current, { zoomControl: false, attributionControl: false });
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      attribution: "© CARTO © OpenStreetMap"
+    }).addTo(map);
+    leafletMapInstance.current = map;
+    if (points.length) {
+      map.fitBounds(points.map(p => [p.lat, p.lon]), { padding: [40, 40], maxZoom: 15 });
+    } else {
+      map.setView([34.05, -118.24], 12);
+    }
+  }, []);
+
+  useEffect(() => {
+    const map = leafletMapInstance.current;
+    if (!map) return;
+    markersRef.current.forEach(m => map.removeLayer(m));
+    markersRef.current = filteredPoints.map(p => {
+      const color = riskToColor(p.predicted_risk_prob);
+      const isSelected = selectedId === p.area_id;
+      const marker = L.circleMarker([p.lat, p.lon], {
+        radius: isSelected ? 10 : 6,
+        color: isSelected ? "#eaf0fa" : color,
+        weight: isSelected ? 2 : 1,
+        fillColor: color,
+        fillOpacity: isSelected ? 0.95 : 0.75,
+      }).addTo(map);
+      marker.bindTooltip(`${p.area_id} · ${p.temp_f?.toFixed(1)}°F · ${(p.predicted_risk_prob * 100).toFixed(0)}% risk`);
+      marker.on("click", () => setSelectedId(p.area_id));
+      return marker;
+    });
+  }, [filteredPoints, selectedId]);
+
+  return (
+    <div className="app-shell">
+      <Sidebar points={points} activeBand={activeBand} onBandChange={(b) => { setActiveBand(b); setSelectedId(null); }} />
+      <div className="map-area">
+        <div className="map-topbar">Showing <strong>{filteredPoints.length}</strong> of <strong>{points.length}</strong> areas</div>
+        <div id="leaflet-map" ref={mapRef}></div>
+        <AreaDetailPanel point={selectedPoint} onClose={() => setSelectedId(null)} />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
